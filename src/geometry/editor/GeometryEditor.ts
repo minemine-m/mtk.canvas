@@ -296,13 +296,15 @@ class GeometryEditor extends Eventable(Class) {
         }
 
         this._switchGeometryEvents('on');
-        if (geometry instanceof Marker ||
-            geometry instanceof Circle ||
-            geometry instanceof Rectangle ||
-            geometry instanceof Ellipse) {
-            //ouline has to be added before shadow to let shadow on top of it, otherwise shadow's events will be overrided by outline
-            this._createOrRefreshOutline();
-        }
+        // 为了使线也有矩形框, 先注释掉此
+        // if (geometry instanceof Marker ||
+        //     geometry instanceof Circle ||
+        //     geometry instanceof Rectangle ||
+        //     geometry instanceof Ellipse) {
+        //     //ouline has to be added before shadow to let shadow on top of it, otherwise shadow's events will be overrided by outline
+        //     this._createOrRefreshOutline();
+        // }
+        this._createOrRefreshOutline();
         if (this._shadowLayer) {
             this._shadowLayer.bringToFront().addGeometry(shadow);
         }
