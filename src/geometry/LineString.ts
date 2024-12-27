@@ -107,6 +107,17 @@ export class LineString extends Path {
     _computeGeodesicArea(): number {
         return 0;
     }
+    // getShell() {
+    //     // 创建一个包含起点和终点的数组
+    //     const shell = [this._coordinates[0].copy()];
+    //     // 遍历所有点，除了起点和终点
+    //     for (let i = 1; i < this._coordinates.length - 1; i++) {
+    //         shell.push(this._coordinates[i].copy());
+    //     }
+    //     // 添加终点
+    //     shell.push(this._coordinates[this._coordinates.length - 1].copy());
+    //     return shell;
+    // }
 }
 
 LineString.mergeOptions(options);

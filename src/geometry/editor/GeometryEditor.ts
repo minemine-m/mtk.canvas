@@ -5,7 +5,7 @@ import Class from '../../core/Class';
 import Eventable from '../../core/Eventable';
 import Point from '../../geo/Point';
 import Coordinate from '../../geo/Coordinate';
-import { Marker, TextBox, LineString, Polygon, Circle, Ellipse, Sector, Rectangle, Geometry } from '../';
+import { Marker, TextBox, LineString, MultiLineString, Polygon, Circle, Ellipse, Sector, Rectangle, Geometry } from '../';
 import EditHandle from '../../renderer/edit/EditHandle';
 import EditOutline from '../../renderer/edit/EditOutline';
 import { loadFunctionTypes } from '../../core/mapbox';
@@ -299,10 +299,14 @@ class GeometryEditor extends Eventable(Class) {
         if (geometry instanceof Marker ||
             geometry instanceof Circle ||
             geometry instanceof Rectangle ||
-            geometry instanceof Ellipse) {
+            geometry instanceof Ellipse || 
+            geometry instanceof LineString ||
+            geometry instanceof MultiLineString
+            ) {
             //ouline has to be added before shadow to let shadow on top of it, otherwise shadow's events will be overrided by outline
             this._createOrRefreshOutline();
         }
+        // this._createOrRefreshOutline();
         if (this._shadowLayer) {
             this._shadowLayer.bringToFront().addGeometry(shadow);
         }
@@ -425,7 +429,7 @@ class GeometryEditor extends Eventable(Class) {
         }
         const points = this._editOutline.points;
 
-        if (geometry instanceof Marker) {
+        if (geometry instanceof Marker || geometry instanceof LineString ||  geometry instanceof MultiLineString) {
             this._editOutline.setPoints(geometry.getContainerExtent().toArray(points));
         } else {
             // const map = this.getMap();
