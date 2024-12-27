@@ -1480,7 +1480,7 @@ class GeometryEditor extends Eventable(Class) {
      * @return {Object} map view
      */
     undo(): any {
-        if (!this._history || this._historyPointer === 0) {
+        if (this._isundoEdit()) {
             return this;
         }
         const record = this._history[--this._historyPointer];
@@ -1495,7 +1495,7 @@ class GeometryEditor extends Eventable(Class) {
      * @return {Object} map view
      */
     redo(): any {
-        if (!this._history || this._historyPointer === this._history.length - 1) {
+        if (this._isRedoEdit()) {
             return this;
         }
         const record = this._history[++this._historyPointer];
@@ -1552,6 +1552,18 @@ class GeometryEditor extends Eventable(Class) {
             }
         }
         this._updating = updating;
+    }
+    _isRedoEdit(): boolean {
+        if (!this._history || this._historyPointer === this._history.length - 1) {
+            return true;
+        }
+        return false; 
+    }
+    _isundoEdit(): boolean {
+        if (!this._history || this._historyPointer === 0) {
+            return true;
+        }
+        return false; 
     }
 
 }
