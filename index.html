@@ -56,11 +56,14 @@
         }),
       });
 
-      const line = new maptalks.LineString(
-        [
+      const line = new maptalks.MultiLineString(
+        [[
           [-0.131049, 51.498568],
           [-0.107049, 51.498568],
-        ], {
+        ],[
+          [-0.121049, 51.498568],
+          [-0.107049, 51.498568],
+        ]], {
           arrowStyle: null, // arrow-style : now we only have classic
           arrowPlacement: "vertex-last", // arrow's placement: vertex-first, vertex-last, vertex-firstlast, point
           visible: true,
@@ -80,17 +83,26 @@
 
       new maptalks.VectorLayer("vector", line).addTo(map);
 
-      startEdit();
+    
 
       function startEdit() {
+        console.log(line,'line')
         line.startEdit();
       }
 
       function endEdit() {
         // line.endEdit();
-        console.log(line.undoEditcheck())
         line.undoEdit();
+        // setTimeout(()=>{
+        //   line.redoEdit();
+        // },5000)
+
+        // line.undoEdit();
+        console.log(line.undoEditcheck())
       }
+      // line.on('editend',(e)=>{
+      //   console.log(e,'e-----------------')
+      // })
     </script>
   </body>
 

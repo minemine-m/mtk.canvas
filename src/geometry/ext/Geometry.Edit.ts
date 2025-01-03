@@ -33,6 +33,8 @@ declare module "../Geometry" {
         undoEdit(): this;
         cancelEdit(): this;
         isEditing(): boolean;
+        undoEditcheck(): boolean;
+        redoEditcheck(): boolean;  
     }
 }
 
@@ -98,7 +100,7 @@ Geometry.include(/** @lends Geometry.prototype */ {
              * @property {Geometry} target - the geometry fires the event
              */
             if (!this._getParent()) {
-                this.fire('editend');
+                this.fire('editend',{color:'#000'});
             }
             const map = this.getMap();
             if (map) {
