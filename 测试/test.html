@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<meta charset='UTF-8' />
+<meta name='viewport' content='width=device-width, initial-scale=1' />
+<title>图形 - MultiPolygon</title>
+<style type='text/css'>
+  html,
+  body {
+    margin: 0px;
+    height: 100%;
+    width: 100%;
+  }
+
+  .container {
+    width: 100%;
+    height: 100%;
+  }
+
+  .pane {
+    background: #34495e;
+    line-height: 28px;
+    color: #fff;
+    z-index: 10;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+
+  .pane a {
+    display: block;
+    color: #fff;
+    text-align: left;
+    padding: 0 10px;
+    min-width: 28px;
+    min-height: 28px;
+    float: left;
+  }
+</style>
+<link rel='stylesheet' href='https://maptalks.com/api/maptalks-gl.css' />
+<script type='text/javascript' src='./maptalks.js'></script>
+
+<body>
+  <div id="map" class="container"></div>
+  <div class="pane">
+    <a href="javascript:startEdit();">Start edit</a><a href="javascript:undoEdit();">undoEdit</a> <a
+      href="javascript:redoEdit();">redoEdit</a>
+  </div>
+
+  <script>
+    const map = new maptalks.Map("map", {
+      center: [-0.113049, 51.498568],
+      zoom: 14,
+      baseLayer: new maptalks.TileLayer("base", {
+        urlTemplate: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+        subdomains: ["a", "b", "c", "d"],
+        attribution: "&copy; <a href='http://osm.org'>OpenStreetMap</a> contributors, &copy; <a href='https://carto.com/'>CARTO</a>",
+      }),
+    });
+
+    const multiPolygon = new maptalks.MultiPolygon(
+      [
+        [
+          [
+            [-0.131049, 51.503568],
+            [-0.107049, 51.503568],
+            [-0.107049, 51.501568],
+            [-0.131049, 51.501568],
+            [-0.129049, 51.502568] // 添加一个顶点
+          ],
+        ],
+        [
+          [
+            [-0.131049, 51.493568],
+            [-0.107049, 51.493568],
+            [-0.131049, 51.491568], // 删除一个顶点
+          ],
+        ],
+      ], {
+      visible: true,
+      editable: true,
+      cursor: null,
+      shadowBlur: 0,
+      shadowColor: "black",
+      draggable: false,
+      dragShadow: false, // display a shadow during dragging
+      drawOnAxis: null, // force dragging stick on a axis, can be: x, y
+      symbol: {
+        lineColor: "#34495e",
+        lineWidth: 2,
+        polygonFill: "rgb(135,196,240)",
+        polygonOpacity: 0.6,
+      },
+    }
+    );
+
+    new maptalks.VectorLayer("vector", multiPolygon).addTo(map);
+    multiPolygon.startEdit();
+
+    function undoEdit() {
+      multiPolygon.undoEdit();
+    }
+
+    function redoEdit() {
+      multiPolygon.redoEdit();
+    }
+  </script>
+</body>
+
+</html>

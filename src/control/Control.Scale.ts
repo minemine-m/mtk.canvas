@@ -100,7 +100,7 @@ class Scale extends Control {
     //@internal
     _updateMetric(maxMeters: number) {
         const meters = this._getRoundNum(maxMeters),
-            label = meters < 1000 ? meters + ' m' : (meters / 1000) + ' km';
+            label = meters < 1000 ? meters + ' 米' : (meters / 1000) + ' 千米';
 
         this._updateScale(this._mScale, label, meters / maxMeters);
     }

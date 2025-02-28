@@ -280,13 +280,14 @@ export class Map extends Handlerable(Eventable(Renderable(Class))) {
      */
     constructor(container: MapContainerType,
         options: MapCreateOptionsType) {
+        // 检查options的原整性
         if (!options) {
             throw new Error('Invalid options when creating map.');
         }
         if (!options['center']) {
             throw new Error('Invalid center when creating map.');
         }
-        // prepare options
+        // prepare options 预处理options,合并到opts里
         const opts = extend({} as any, options) as MapOptionsType;
         const zoom = opts['zoom'];
         delete opts['zoom'];
@@ -297,7 +298,7 @@ export class Map extends Handlerable(Eventable(Renderable(Class))) {
         delete opts['baseLayer'];
         const layers = opts['layers'];
         delete opts['layers'];
-        super(opts);
+        super(opts);  // 不理解
 
         /**
          * @property {String}  - Version of library
@@ -306,14 +307,18 @@ export class Map extends Handlerable(Eventable(Renderable(Class))) {
          */
         this.VERSION = Map.VERSION;
 
+        // 在当前对象（this）上定义或修改名为id的属性,不可修改
         Object.defineProperty(this, 'id', {
             value: UID(),
             writable: false
         });
 
+        
         this._loaded = false;
+        // 生成了 this._containerDOM （地图容器）
         this._initContainer(container);
 
+        // todo 未知用意
         this._panels = {};
 
         //Layers
@@ -324,12 +329,14 @@ export class Map extends Handlerable(Eventable(Renderable(Class))) {
         this._center = center;
         this._centerZ = center.z;
 
+        // todo  设置空间参考，后续详细了解
         this.setSpatialReference(opts['spatialReference'] || opts['view']);
 
-
+        // todo 未知用意
         this._mapViewPoint = new Point(0, 0);
-
+        // todo 初始化渲染器
         this._initRenderer();
+        // todo 更新地图尺寸
         this._updateMapSize(this._getContainerDomSize());
 
         if (baseLayer) {
@@ -1941,12 +1948,15 @@ export class Map extends Handlerable(Eventable(Renderable(Class))) {
             }
         } else {
             this._containerDOM = container as HTMLDivElement;
+            // 判断当前环境是不是开发环境
             if (IS_NODE) {
                 //Reserve container's constructor in node for canvas creating.
+                // 不太理解
                 this.CanvasClass = this._containerDOM.constructor;
             }
         }
 
+        // 根据子节点判断是否已经创建mtk
         if (this._containerDOM.childNodes && this._containerDOM.childNodes.length > 0) {
             //@ts-expect-error I don't know either
             if (this._containerDOM.childNodes[0].className === 'maptalks-wrapper') {
