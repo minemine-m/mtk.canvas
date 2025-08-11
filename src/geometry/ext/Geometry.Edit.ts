@@ -22,6 +22,7 @@ export type GeometryEditOptionsType = {
     collisionBufferSize?: number;
     vertexZIndex?: number;
     newVertexZIndex?: number;
+    shadowDraggable?: boolean;
 }
 
 declare module "../Geometry" {
@@ -34,7 +35,7 @@ declare module "../Geometry" {
         cancelEdit(): this;
         isEditing(): boolean;
         undoEditcheck(): boolean;
-        redoEditcheck(): boolean;  
+        redoEditcheck(): boolean;
     }
 }
 
@@ -100,7 +101,7 @@ Geometry.include(/** @lends Geometry.prototype */ {
              * @property {Geometry} target - the geometry fires the event
              */
             if (!this._getParent()) {
-                this.fire('editend',{color:'#000'});
+                this.fire('editend', { color: '#000' });
             }
             const map = this.getMap();
             if (map) {
