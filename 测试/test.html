@@ -37,7 +37,9 @@
   }
 </style>
 <link rel='stylesheet' href='https://maptalks.com/api/maptalks-gl.css' />
-<script type='text/javascript' src='./maptalks.js'></script>
+<!-- <script type='text/javascript' src='../dist/maptalks.js'></script> -->
+<!-- <script src="./maptalks-gl.js"></script> -->
+  <script src="https://maptalks.com/api/maptalks-gl.js"></script>
 
 <body>
   <div id="map" class="container"></div>
@@ -93,11 +95,52 @@
     }
     );
 
+    const editopt = {
+      shadowDraggable: true,
+      centerHandleSymbol: {
+        'markerType': 'ellipse',
+        'markerFill': '#fff',
+        'markerLineColor': '#000',
+        'markerLineWidth': 2,
+        'markerWidth': 0,
+        'markerHeight': 0,
+        'opacity': 1,
+        markerDx: 4,
+        markerDy: 4
+      },
+    }
+
+    const line = new maptalks.LineString(
+      [
+        [-0.131049, 51.498568],
+        [-0.107049, 51.498568],
+      ], {
+      arrowStyle: null, // arrow-style : now we only have classic
+      arrowPlacement: "vertex-last", // arrow's placement: vertex-first, vertex-last, vertex-firstlast, point
+      visible: true,
+      editable: true,
+      cursor: null,
+      shadowBlur: 0,
+      shadowColor: "black",
+      draggable: false,
+      dragShadow: false, // display a shadow during dragging
+      drawOnAxis: null, // force dragging stick on a axis, can be: x, y
+      symbol: {
+        lineColor: "#1bbc9b",
+        lineWidth: 3,
+      },
+    }
+    );
+
     new maptalks.VectorLayer("vector", multiPolygon).addTo(map);
-    multiPolygon.startEdit();
+    new maptalks.VectorLayer("vector1", line).addTo(map);
+    multiPolygon.startEdit(editopt);
+    line.startEdit(editopt);
 
     function undoEdit() {
-      multiPolygon.undoEdit();
+      // multiPolygon.undoEdit();
+      multiPolygon.endEdit();
+
     }
 
     function redoEdit() {

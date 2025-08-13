@@ -286,8 +286,8 @@ class GeometryEditor extends Eventable(Class) {
             shadow._setEventTarget(geometry);
             //drag shadow by center handle instead.
             shadow.setId(null).config({
-                // 'draggable': false
-                'draggable': this.options.shadowDraggable
+                'draggable': true
+                // 'draggable': this.options.shadowDraggable
             });
 
             this._shadow = shadow;
@@ -340,6 +340,8 @@ class GeometryEditor extends Eventable(Class) {
      * Stop editing
      */
     stop(): void {
+        console.log('我已出发')
+        debugger
         delete this._history;
         delete this._historyPointer;
         delete this._editOutline;
@@ -459,6 +461,7 @@ class GeometryEditor extends Eventable(Class) {
 
     //@internal
     _createCenterHandle(): void {
+        console.log('好像是一场梦境')
         const map = this.getMap();
         const symbol = this.options['centerHandleSymbol'];
         let shadow;

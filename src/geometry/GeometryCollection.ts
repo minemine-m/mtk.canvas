@@ -621,6 +621,7 @@ class GeometryCollection extends Geometry {
     }
 
     endEdit(): this {
+        debugger
         if (this.isEmpty()) {
             return this;
         }
