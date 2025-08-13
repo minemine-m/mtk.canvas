@@ -414,6 +414,7 @@ class GeometryEditor extends Eventable(Class) {
 
     //@internal
     _onMarkerDragEnd(): void {
+        console.log('我的歌声里',this._shadow)
         this._update('setCoordinates', this._shadow.getCoordinates().toArray());
     }
 
