@@ -286,8 +286,8 @@ class GeometryEditor extends Eventable(Class) {
             shadow._setEventTarget(geometry);
             //drag shadow by center handle instead.
             shadow.setId(null).config({
-                'draggable': true
-                // 'draggable': this.options.shadowDraggable
+                //'draggable': true
+                'draggable': this.options.shadowDraggable
             });
 
             this._shadow = shadow;
@@ -353,6 +353,16 @@ class GeometryEditor extends Eventable(Class) {
         }
         this._geometry.config('draggable', this._geometryDraggble);
         if (this._shadow) {
+
+
+            if (this.options.shadowDraggable) {
+                if (!(this._geometry instanceof Marker)) {
+                    let coordiantes = this._shadow.getCoordinates();
+                    // console.log(coordiantes,'coordiantes')
+                    // this._update('setCoordinates', coordiantes.toArray());
+                    this._geometry.setCoordinates(coordiantes);
+                }
+            }
             delete this._shadow;
             delete this._geometryDraggble;
             this._geometry.show();
@@ -414,7 +424,7 @@ class GeometryEditor extends Eventable(Class) {
 
     //@internal
     _onMarkerDragEnd(): void {
-        console.log('我的歌声里',this._shadow)
+        console.log('我的歌声里', this._shadow)
         this._update('setCoordinates', this._shadow.getCoordinates().toArray());
     }
 
