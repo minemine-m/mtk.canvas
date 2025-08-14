@@ -340,8 +340,6 @@ class GeometryEditor extends Eventable(Class) {
      * Stop editing
      */
     stop(): void {
-        console.log('我已出发')
-        debugger
         delete this._history;
         delete this._historyPointer;
         delete this._editOutline;
@@ -357,7 +355,7 @@ class GeometryEditor extends Eventable(Class) {
 
             if (this.options.shadowDraggable) {
                 if (!(this._geometry instanceof Marker)) {
-                    let coordiantes = this._shadow.getCoordinates();
+                    const coordiantes = this._shadow.getCoordinates();
                     // console.log(coordiantes,'coordiantes')
                     // this._update('setCoordinates', coordiantes.toArray());
                     this._geometry.setCoordinates(coordiantes);
