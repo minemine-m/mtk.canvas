@@ -15,7 +15,6 @@ import { getDefaultBBOX, pointsBBOX } from '../../core/util/bbox';
 import Extent from '../../geo/Extent';
 
 const EDIT_STAGE_LAYER_PREFIX = INTERNAL_LAYER_PREFIX + '_edit_stage_';
-const SHADOW_DRAG_EVENTS = 'dragend dragstart';
 
 type GeometryEvents = {
     'symbolchange': any,
@@ -177,7 +176,7 @@ class GeometryEditor extends Eventable(Class) {
     //@internal
     _shadowLayer: any
     //@internal
-    _shadow?: Geometry;
+    _shadow: any
     //@internal
     _geometryDraggble: boolean
     //@internal
@@ -352,7 +351,16 @@ class GeometryEditor extends Eventable(Class) {
         }
         this._geometry.config('draggable', this._geometryDraggble);
         if (this._shadow) {
-            this._shadow.off(SHADOW_DRAG_EVENTS, this._shadowDragEvent, this);
+
+
+            if (this.options.shadowDraggable) {
+                if (!(this._geometry instanceof Marker)) {
+                    const coordiantes = this._shadow.getCoordinates();
+                    // console.log(coordiantes,'coordiantes')
+                    // this._update('setCoordinates', coordiantes.toArray());
+                    this._geometry.setCoordinates(coordiantes);
+                }
+            }
             delete this._shadow;
             delete this._geometryDraggble;
             this._geometry.show();
@@ -409,13 +417,13 @@ class GeometryEditor extends Eventable(Class) {
     _onGeoSymbolChange(param: any): void {
         if (this._shadow) {
             this._shadow.setSymbol(param.target._getInternalSymbol());
-
         }
     }
 
     //@internal
     _onMarkerDragEnd(): void {
-        this._update('setCoordinates', (this._shadow as Marker).getCoordinates().toArray());
+        console.log('我的歌声里', this._shadow)
+        this._update('setCoordinates', this._shadow.getCoordinates().toArray());
     }
 
     /**
@@ -429,6 +437,7 @@ class GeometryEditor extends Eventable(Class) {
         const geometry = this._geometry;
         const outline = this._editOutline;
         if (!outline) {
+            // @ts-expect-error 这个库的类型定义有问题，暂时无法修复
             this._editOutline = new EditOutline(this, this.getMap());
             this._addRefreshHook(this._createOrRefreshOutline);
         }
@@ -459,29 +468,14 @@ class GeometryEditor extends Eventable(Class) {
         return outline;
     }
 
-    _shadowDragEvent(e) {
-        const type = e.type;
-        if (type === 'dragend') {
-            //update Geometry coordinates by shadow
-            this._updateCoordFromShadow();
-        }
-    }
-
 
     //@internal
     _createCenterHandle(): void {
+        console.log('好像是一场梦境')
         const map = this.getMap();
         const symbol = this.options['centerHandleSymbol'];
         let shadow;
-        if (this._shadow) {
-            this._shadow.off(SHADOW_DRAG_EVENTS, this._shadowDragEvent, this);
-        }
-
-
         // const cointainerPoint = map.coordToContainerPoint(this._geometry.getCenter());
-        if (this.options.shadowDraggable && this._shadow) {
-            this._shadow.on(SHADOW_DRAG_EVENTS, this._shadowDragEvent, this);
-        }
         const cointainerPoint = coordinatesToContainerPoint(map, this._geometry._getEditCenter());
         const handle = this.createHandle(cointainerPoint, {
             ignoreCollision: true,
@@ -535,6 +529,7 @@ class GeometryEditor extends Eventable(Class) {
             ];
         });
         const removeVertexOn = this.options['removeVertexOn'];
+        // @ts-expect-error 这个库的类型定义有问题，暂时无法修复
         const handle = new EditHandle(this, map, { symbol, cursor: opts['cursor'], events: removeVertexOn as any, ignoreCollision: (opts as any).ignoreCollision });
         handle.setContainerPoint(containerPoint);
         return handle;
